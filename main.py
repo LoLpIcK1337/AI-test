@@ -19,7 +19,7 @@ hidden_dim = 64
 output_dim = 1
 # Загрузка модели
 model = CalculatorModel(input_dim, hidden_dim, output_dim)
-model.load_state_dict(torch.load('calculator_model.pth'))
+model.load_state_dict(torch.load('D:\\AI-test\\AI-test\\model\\model_1.pth'))
 model.eval()  # Переводим модель в режим оценки
 
 # Использование модели
