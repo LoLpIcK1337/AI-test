@@ -23,7 +23,7 @@ model.load_state_dict(torch.load('D:\\AI-test\\AI-test\\model\\model_1.pth'))
 model.eval()  # Переводим модель в режим оценки
 
 # Использование модели
-data = np.array([[5, 10, 0]])  # Пример данных
+data = np.array([[5.5, 10, 0]])  # Пример данных
 inputs = torch.from_numpy(data).float()
 outputs = model(inputs)
-print(outputs)
+print(outputs.item())
