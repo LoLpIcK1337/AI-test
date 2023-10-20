@@ -84,7 +84,7 @@ for epoch in range(1000):  # количество эпох
         example_output = model(torch.from_numpy(example_input).float().unsqueeze(0))
         print(f'Example: {example_input}, Target: {example_target}, Output: {example_output.item()}')
 
-    torch.save(model.state_dict(), 'model_1.pth')
+    torch.save(model.state_dict(), 'D:\\AI-test\\AI-test\\model\\model_1.pth')
 
 # Тестирование модели
 test_data = np.array([[5, 10, 0], [20, 30, 1], [50, 50, 2]])
