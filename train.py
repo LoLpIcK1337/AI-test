@@ -23,12 +23,12 @@ model = CalculatorModel(input_dim, hidden_dim, output_dim)
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # Функция потерь
-criterion = nn.MSELoss()
+criterion = nn.L1Loss()
 
 # Генерация данных для обучения
-num_samples = 10000
-input_data = np.random.randint(1, 100, (num_samples, 2))  # избегаем нулей
-operation_data = np.random.randint(0, 6, (num_samples, 1))
+num_samples = 100000
+input_data = np.random.randint(1, 100, (num_samples, 2)) 
+operation_data = np.random.randint(0, 3, (num_samples, 1))
 input_data = np.concatenate((input_data, operation_data), axis=1)
 
 # Вычисление целевых данных
@@ -38,33 +38,12 @@ for i in range(num_samples):
         result = input_data[i, 0] + input_data[i, 1]
     elif operation_data[i] == 1:  # вычитание
         result = input_data[i, 0] - input_data[i, 1]
-    elif operation_data[i] == 2:  # умножение
-        result = input_data[i, 0] * input_data[i, 1]
-    elif operation_data[i] == 3:  # деление
 
-        if input_data[i, 1] != 0:  # избегаем деления на ноль
-            result = input_data[i, 0] / input_data[i, 1]
-    elif operation_data[i] == 4:  # возведение в степень
-        result = input_data[i, 0] ** input_data[i, 1]
-
-    elif operation_data[i] == 5:  # логарифмирование
-
-        if input_data[i, 0] > 0:  # избегаем логарифма от нуля
-            result = np.log(input_data[i, 0])
-    elif operation_data[i] == 6:  # квадратный корень
-
-        if input_data[i, 0] >= 0:  # избегаем корня от отрицательного числа
-            result = np.sqrt(input_data[i, 0])
-
-    elif operation_data[i] == 7:  # экспонента
-        result = np.exp(input_data[i, 0])
-
-    # Ограничиваем размер чисел до 6 цифр и округляем до 10 знаков после точки
     if abs(result) < 1e6:
         target_data[i] = np.round(result, 10)
 
 # Обучение модели
-for epoch in range(1000):  # количество эпох
+for epoch in range(100000):  # количество эпох
     inputs = torch.from_numpy(input_data).float()
     targets = torch.from_numpy(target_data).float().view(-1, 1)
     optimizer.zero_grad()
@@ -73,12 +52,9 @@ for epoch in range(1000):  # количество эпох
     loss.backward()
     optimizer.step()
 
-    # Выводим loss каждые 10 эпох
     if epoch % 10 == 0:
         print(f'Epoch {epoch}, Loss: {loss.item()}')
-
-        # Выводим пример и ответ
-        example_index = np.random.randint(num_samples)  # выбираем случайный пример
+        example_index = np.random.randint(num_samples)
         example_input = input_data[example_index]
         example_target = target_data[example_index]
         example_output = model(torch.from_numpy(example_input).float().unsqueeze(0))
@@ -90,4 +66,4 @@ for epoch in range(1000):  # количество эпох
 test_data = np.array([[5, 10, 0], [20, 30, 1], [50, 50, 2]])
 test_inputs = torch.from_numpy(test_data).float()
 test_outputs = model(test_inputs)
-print(test_outputs)
+print(test_outputs.item())
